@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>坐站提醒</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Title bar -->
+    <div class="titlebar" style="display:none">
+      <span class="titlebar-title">坐站提醒小助手</span>
+      <div class="titlebar-buttons">
+        <button class="titlebar-btn" id="minimizeBtn" title="最小化">
+          <svg width="12" height="12" viewBox="0 0 12 12"><rect y="5" width="12" height="2" rx="1" fill="currentColor"/></svg>
+        </button>
+        <button class="titlebar-btn" id="closeBtn" title="最小化到托盘">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="content" style="display:none">
+      <!-- Bear character -->
+      <div class="bear-container" id="bearContainer">
+        <svg id="bearSvg" viewBox="0 0 200 200" class="bear"></svg>
+      </div>
+
+      <!-- Timer ring -->
+      <div class="timer-ring-container">
+        <svg class="timer-ring" viewBox="0 0 200 200">
+          <circle class="timer-ring-bg" cx="100" cy="100" r="88" />
+          <circle class="timer-ring-progress" id="progressRing" cx="100" cy="100" r="88" />
+        </svg>
+        <div class="timer-text">
+          <div class="timer-time" id="timerDisplay">45:00</div>
+          <div class="timer-label" id="timerLabel">坐姿时间</div>
+        </div>
+      </div>
+
+      <!-- Status message -->
+      <div class="status-message" id="statusMessage"></div>
+
+      <!-- Controls -->
+      <div class="controls" id="controls">
+        <button class="btn btn-secondary" id="resetBtn" title="重置">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 1 9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 22v-6h6"/>
+          </svg>
+        </button>
+        <button class="btn btn-primary" id="pauseBtn" title="暂停/继续">
+          <svg id="pauseIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1"/>
+            <rect x="14" y="4" width="4" height="16" rx="1"/>
+          </svg>
+          <svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+            <polygon points="5,3 19,12 5,21"/>
+          </svg>
+        </button>
+        <button class="btn btn-secondary" id="settingsBtn" title="设置">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Settings panel (hidden by default) -->
+      <div class="settings-panel" id="settingsPanel" style="display:none">
+        <div class="setting-row">
+          <label>小伙伴</label>
+          <div class="character-select" id="characterSelect">
+            <button class="char-btn active" data-char="cat">🐱</button>
+            <button class="char-btn" data-char="bear">🐻</button>
+            <button class="char-btn" data-char="custom">🖼️</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <label>坐姿时长（分钟）</label>
+          <input type="number" id="sitMinutes" value="45" min="1" max="120" />
+        </div>
+        <div class="setting-row">
+          <label>站姿时长（分钟）</label>
+          <input type="number" id="standMinutes" value="5" min="1" max="60" />
+        </div>
+        <button class="btn btn-confirm" id="saveSettingsBtn">保存</button>
+      </div>
+    </div>
+
+    <!-- Mini mode (floating bear) -->
+    <div class="mini-mode" id="miniMode">
+      <div class="mini-bear-wrapper">
+        <svg id="miniBearSvg" viewBox="0 0 200 200" class="mini-bear"></svg>
+        <svg class="mini-ring" viewBox="0 0 80 80">
+          <circle class="mini-ring-bg" cx="40" cy="40" r="36" />
+          <circle class="mini-ring-progress" id="miniProgressRing" cx="40" cy="40" r="36" />
+        </svg>
+      </div>
+      <div class="mini-tooltip" id="miniTooltip">
+        <span id="miniTime">45:00</span> <span id="miniTooltipLabel">后站起来</span>
+      </div>
+      <button class="mini-confirm-btn" id="miniConfirmBtn" style="display:none">我站起来了</button>
+    </div>
+
+    <!-- Reminder overlay -->
+    <div class="reminder-overlay" id="reminderOverlay" style="display:none">
+      <div class="reminder-content">
+        <div class="reminder-bear" id="reminderBear"></div>
+        <div class="reminder-text" id="reminderText">该站起来啦！</div>
+        <div class="reminder-subtext">活动一下，保护你的腰~</div>
+        <button class="btn btn-reminder" id="reminderBtn">好的，我起来了！</button>
+        <div class="reminder-countdown" id="reminderCountdown">30 秒后自动切换</div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>
