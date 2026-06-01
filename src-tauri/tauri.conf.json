@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "Stand Up Timer",
-        "width": 240,
-        "height": 200,
+        "width": 140,
+        "height": 150,
         "resizable": true,
         "decorations": false,
         "transparent": true,

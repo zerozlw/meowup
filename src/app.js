@@ -178,8 +178,8 @@ function drawCharacter(mode) {
 
   if (state.character === 'custom') {
     const src = isStanding ? standImg : sitImg;
-    mainSvg.outerHTML = `<img id="bearSvg" src="${src}" class="bear" style="width:100%;height:100%;object-fit:contain;" />`;
-    miniSvg.outerHTML = `<img id="miniBearSvg" src="${src}" class="mini-bear" style="width:100%;height:100%;object-fit:contain;" />`;
+    mainSvg.outerHTML = `<img id="bearSvg" src="${src}" class="bear" draggable="false" style="width:100%;height:100%;object-fit:contain;" />`;
+    miniSvg.outerHTML = `<img id="miniBearSvg" src="${src}" class="mini-bear" draggable="false" style="width:100%;height:100%;object-fit:contain;" />`;
   } else {
     // Restore to SVG if switching from custom
     const mainEl = document.getElementById('bearSvg');
@@ -431,7 +431,7 @@ function saveSettings() {
 }
 
 // --- Sass Message ---
-function showSassMessage() {
+async function showSassMessage() {
   const idx = Math.floor(Math.random() * sassMessages.length);
   const msg = sassMessages[idx];
   const tooltip = document.getElementById('miniTooltip');
@@ -445,21 +445,21 @@ function showSassMessage() {
   tooltip.classList.add('sass');
   miniEl.classList.add('annoyed');
 
-  // Change expression based on category
+  // Change expression
   let exprSrc = null;
   if (idx < 42) exprSrc = angryImg;
   else if (idx >= 54 && idx <= 84) exprSrc = relaxImg;
   else if (idx >= 85) exprSrc = dreamImg;
 
-  const miniSvg = document.getElementById('miniBearSvg');
-  if (exprSrc && miniSvg) {
-    miniSvg.outerHTML = `<img id="miniBearSvg" src="${exprSrc}" class="mini-bear" style="width:100%;height:100%;object-fit:contain;" />`;
+  if (exprSrc && miniBear) {
+    miniBear.outerHTML = `<img id="miniBearSvg" src="${exprSrc}" class="mini-bear" draggable="false" style="width:100%;height:100%;object-fit:contain;" />`;
   }
 
-  setTimeout(() => {
+  setTimeout(async () => {
     tooltip.classList.remove('sass');
     miniEl.classList.remove('annoyed');
     state.showingSass = false;
+
     if (exprSrc) {
       const el = document.getElementById('miniBearSvg');
       if (el) {
@@ -493,7 +493,7 @@ async function enterMiniMode() {
     await win.setShadow(false);
     await win.setResizable(false);
 
-    // Position first, then resize
+    // Position first, then resize to fit actual content
     const monitor = await win.currentMonitor();
     if (monitor) {
       const scale = monitor.scaleFactor;
@@ -508,7 +508,7 @@ async function enterMiniMode() {
       }
     }
 
-    await win.setSize(new LogicalSize(240, 200));
+    await win.setSize(new LogicalSize(140, 150));
   } catch (e) {
     console.log('Mini mode setup error:', e);
   }
