@@ -20,6 +20,8 @@
     "core:window:allow-current-monitor",
     "core:window:allow-close",
     "core:window:allow-set-shadow",
+    "core:webview:allow-create-webview-window",
+    "core:window:allow-set-ignore-cursor-events",
     "core:window:allow-outer-position",
     "notification:default"
   ]

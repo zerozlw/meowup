@@ -1,4 +1,5 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { LogicalSize, LogicalPosition } from '@tauri-apps/api/dpi';
 import { sendNotification, requestPermission } from '@tauri-apps/plugin-notification';
 import sitImg from './sit-new.png';
@@ -430,20 +431,25 @@ function saveSettings() {
   toggleSettings();
 }
 
-// --- Sass Message ---
+// --- Sass Message (separate bubble window) ---
+let bubbleWin = null;
+let bubbleTimeout = null;
+
 async function showSassMessage() {
+  // Clear previous timeout and close old bubble
+  if (bubbleTimeout) { clearTimeout(bubbleTimeout); bubbleTimeout = null; }
+  if (bubbleWin) { try { await bubbleWin.close(); } catch (e) {} bubbleWin = null; }
+
   const idx = Math.floor(Math.random() * sassMessages.length);
   const msg = sassMessages[idx];
-  const tooltip = document.getElementById('miniTooltip');
-  const miniLabel = document.getElementById('miniTooltipLabel');
   const miniEl = document.getElementById('miniMode');
   const miniBear = document.getElementById('miniBearSvg');
 
   state.showingSass = true;
-  document.getElementById('miniTime').textContent = '';
-  miniLabel.textContent = msg;
-  tooltip.classList.add('sass');
   miniEl.classList.add('annoyed');
+
+  // Block interaction on mini window
+  try { await win.setIgnoreCursorEvents(true); } catch (e) {}
 
   // Change expression
   let exprSrc = null;
@@ -455,15 +461,42 @@ async function showSassMessage() {
     miniBear.outerHTML = `<img id="miniBearSvg" src="${exprSrc}" class="mini-bear" draggable="false" style="width:100%;height:100%;object-fit:contain;" />`;
   }
 
-  setTimeout(async () => {
-    tooltip.classList.remove('sass');
+  // Create bubble window above mini window
+  const pos = await win.outerPosition();
+  const scale = await win.scaleFactor();
+  const bubbleW = 260, bubbleH = 60;
+  const x = Math.round(pos.x / scale + (140 - bubbleW) / 2);
+  const y = Math.round(pos.y / scale - bubbleH - 2);
+  try {
+    bubbleWin = new WebviewWindow('bubble-' + Date.now(), {
+      url: 'src/bubble.html?msg=' + encodeURIComponent(msg),
+      width: bubbleW,
+      height: bubbleH,
+      x, y,
+      decorations: false,
+      transparent: true,
+      shadow: false,
+      alwaysOnTop: true,
+      resizable: false,
+      skipTaskbar: true,
+      focus: false,
+    });
+  } catch (e) {}
+
+  bubbleTimeout = setTimeout(async () => {
+    if (bubbleWin) {
+      try { await bubbleWin.close(); } catch (e) {}
+      bubbleWin = null;
+    }
+    bubbleTimeout = null;
     miniEl.classList.remove('annoyed');
     state.showingSass = false;
-
+    // Re-enable interaction
+    try { await win.setIgnoreCursorEvents(false); } catch (e) {}
     if (exprSrc) {
       const el = document.getElementById('miniBearSvg');
       if (el) {
-        el.outerHTML = `<svg id="miniBearSvg" viewBox="0 0 200 200" class="mini-bear"></svg>`;
+        el.outerHTML = '<svg id="miniBearSvg" viewBox="0 0 200 200" class="mini-bear"></svg>';
         drawCharacter(state.mode);
       }
     }
