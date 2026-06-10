@@ -184,6 +184,81 @@
       margin-top: 28px; font-size: 14px; color: rgba(255,255,255,0.65);
     }
 
+    /* Showcase */
+    .showcase-row {
+      display: flex; gap: 48px; justify-content: center;
+      align-items: flex-start; padding: 0 40px;
+    }
+    .showcase-item { flex: 1; max-width: 300px; text-align: center; }
+    .showcase-item:nth-child(2) { margin-top: 40px; }
+    .showcase-caption {
+      margin-top: 14px; font-size: 14px; color: var(--brown-light); font-weight: 600;
+    }
+    .mockup {
+      background: white; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.03);
+    }
+    .mockup-bar {
+      height: 28px; background: var(--cream-dark);
+      display: flex; align-items: center; padding: 0 10px; gap: 5px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.r { background: #FF5F57; } .dot.y { background: #FFBD2E; } .dot.g { background: #28C840; }
+    .mockup-body {
+      padding: 20px; background: var(--cream); text-align: center;
+    }
+    .mockup-cat { width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px; }
+    .mockup-ring-wrap {
+      position: relative; width: 120px; height: 120px; margin: 0 auto 8px;
+    }
+    .mockup-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: rgba(255,155,80,0.12); stroke-width: 6; }
+    .ring-fg { fill: none; stroke: var(--orange); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 377; stroke-dashoffset: 100; }
+    .mockup-time {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%); font-size: 22px; font-weight: 800; color: var(--brown);
+    }
+    .mockup-label { font-size: 12px; color: var(--brown-light); margin-bottom: 12px; }
+    .mockup-btns { display: flex; justify-content: center; gap: 8px; }
+    .m-btn {
+      width: 30px; height: 30px; border-radius: 50%; background: var(--cream-dark);
+      display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--brown-light);
+    }
+    .m-btn.primary { background: var(--orange); color: white; }
+    .remind-body { display: flex; flex-direction: column; align-items: center; padding: 24px 20px; }
+    .remind-text { font-size: 20px; font-weight: 800; color: var(--orange); margin-bottom: 6px; }
+    .remind-sub { font-size: 13px; color: var(--brown-light); margin-bottom: 16px; }
+    .remind-btn {
+      padding: 10px 24px; background: var(--orange); color: white;
+      border-radius: 50px; font-size: 14px; font-weight: 700;
+    }
+    .mockup-mini-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 16px; padding: 32px 0;
+    }
+    .mini-float-demo { text-align: center; }
+    .mini-float-cat {
+      width: 100px; height: 100px; object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(255,155,80,0.15));
+      animation: miniBob 3s ease-in-out infinite;
+    }
+    @keyframes miniBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .mini-float-time {
+      background: rgba(92,64,51,0.85); color: white; font-size: 11px;
+      font-weight: 600; padding: 3px 10px; border-radius: 6px;
+      display: inline-block; margin-top: 6px;
+    }
+    .mini-speech {
+      background: white; border: 2px solid #FFB5B5; border-radius: 14px;
+      padding: 10px 18px; font-size: 15px; font-weight: 700; color: #E85D5D;
+      position: relative; box-shadow: 0 4px 16px rgba(255,107,107,0.1);
+    }
+    .mini-speech::after {
+      content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+      border-left: 8px solid transparent; border-right: 8px solid transparent;
+      border-bottom: 8px solid white;
+    }
+
     /* Footer */
     .footer {
       padding: 40px 60px; text-align: center;
@@ -233,15 +308,15 @@
     <p style="font-size:16px;color:var(--brown-light);margin-top:12px;">每只猫咪都有独立的表情和姿态，选中后所有画面都会跟随切换</p>
     <div class="cats-grid">
       <div class="cat-card">
-        <img src="assets/sit-white-blue.png" alt="蓝白猫">
+        <img src="assets/stand-white-blue.png" alt="蓝白猫">
         <div class="cat-card-label">蓝白猫</div>
       </div>
       <div class="cat-card">
-        <img src="assets/sit-black.png" alt="黑猫">
+        <img src="assets/stand-black.png" alt="黑猫">
         <div class="cat-card-label">黑猫</div>
       </div>
       <div class="cat-card">
-        <img src="assets/sit-ginger.png" alt="橘猫">
+        <img src="assets/stand-ginger.png" alt="橘猫">
         <div class="cat-card-label">橘猫</div>
       </div>
     </div>
@@ -282,6 +357,65 @@
         <div class="feature-icon">🪶</div>
         <h3 class="feature-title">轻量极速</h3>
         <p class="feature-desc">安装包仅 9MB，后台安静运行，不打扰你的工作流</p>
+      </div>
+    </div>
+
+    <!-- UI Preview -->
+    <div style="margin-top:64px">
+      <div style="text-align:center;margin-bottom:40px">
+        <div class="section-tag">🖥️ 界面预览</div>
+        <h2 style="font-size:28px;font-weight:900;">简洁 · 可爱 · 好用</h2>
+      </div>
+      <div class="showcase-row">
+        <div class="showcase-item">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            </div>
+            <div class="mockup-body">
+              <img src="assets/sit-white-blue.png" class="mockup-cat" alt="">
+              <div class="mockup-ring-wrap">
+                <svg class="mockup-ring" viewBox="0 0 140 140">
+                  <circle class="ring-bg" cx="70" cy="70" r="60"/>
+                  <circle class="ring-fg" cx="70" cy="70" r="60"/>
+                </svg>
+                <span class="mockup-time">32:45</span>
+              </div>
+              <div class="mockup-label">坐姿时间</div>
+              <div class="mockup-btns">
+                <span class="m-btn">↺</span>
+                <span class="m-btn primary">⏸</span>
+                <span class="m-btn">🔄</span>
+                <span class="m-btn">⚙</span>
+              </div>
+            </div>
+          </div>
+          <p class="showcase-caption">主界面 — 倒计时 + 可爱猫咪 + 控制按钮</p>
+        </div>
+        <div class="showcase-item">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            </div>
+            <div class="mockup-body remind-body">
+              <img src="assets/stand-white-blue.png" class="mockup-cat" alt="">
+              <div class="remind-text">该站起来啦！</div>
+              <div class="remind-sub">活动一下，保护你的腰~</div>
+              <span class="remind-btn">我站起来了！</span>
+            </div>
+          </div>
+          <p class="showcase-caption">到时提醒 — 猫咪站起来催你</p>
+        </div>
+        <div class="showcase-item">
+          <div class="mockup-mini-wrap">
+            <div class="mini-float-demo">
+              <img src="assets/stand-white-blue.png" class="mini-float-cat" alt="">
+              <div class="mini-float-time">23:45 后站起来</div>
+            </div>
+            <div class="mini-speech">铲屎的，动一动！</div>
+          </div>
+          <p class="showcase-caption">迷你浮窗 — 桌面宠物 + 吐槽气泡</p>
+        </div>
       </div>
     </div>
   </section>
