@@ -1,10 +1,10 @@
 [package]
-name = "stand-up-timer"
+name = "meowup"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "stand_up_timer_lib"
+name = "meowup_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
